@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { FaCheck, FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -179,10 +180,10 @@ function App() {
                   </>
                 ) : (
                   <>
-                    <button onClick={() => startEditing(item)}>Edit</button>
-                    <button onClick={() => deleteTodo(item.id)}>Delete</button>
-                    <button onClick={() => completeTodo(item.id)}>Complete</button>
-                    <button onClick={() => showDetails(item)}>Details</button>
+                    <button onClick={() => startEditing(item)}><FaEdit /></button>
+                    <button onClick={() => deleteTodo(item.id)}><FaTrash /></button>
+                    <button onClick={() => completeTodo(item.id)}><FaCheck /></button>
+                    <button onClick={() => showDetails(item)}><FaInfoCircle /></button>
                   </>
                 )}
               </td>
