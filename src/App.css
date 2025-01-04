@@ -85,3 +85,43 @@ td:last-of-type {
     font-size: 1rem;
     cursor: pointer;
 }
+
+.priority-low {
+    color: green;
+}
+
+.priority-medium {
+    color: orange;
+}
+
+.priority-high {
+    color: red;
+}
+
+@media (max-width: 600px) {
+    table {
+        width: 100%;
+    }
+
+    .todo-form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .todo-form input,
+    .todo-form select,
+    .todo-form button {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filters button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}

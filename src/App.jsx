@@ -3,15 +3,17 @@ import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([
-    { id: 1, title: "test1", status: "todo" },
-    { id: 2, title: "test2", status: "done" },
-    { id: 3, title: "test3", status: "todo" },
-    { id: 4, title: "test4", status: "done" }
+    { id: 1, title: "test1", status: "todo", priority: "low" },
+    { id: 2, title: "test2", status: "done", priority: "medium" },
+    { id: 3, title: "test3", status: "todo", priority: "high" },
+    { id: 4, title: "test4", status: "done", priority: "low" }
   ]);
   const [newTodo, setNewTodo] = useState("");
+  const [newPriority, setNewPriority] = useState("low");
   const [editingTodo, setEditingTodo] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [editingStatus, setEditingStatus] = useState("");
+  const [editingPriority, setEditingPriority] = useState("");
   const [filter, setFilter] = useState("all");
 
   const addTodo = () => {
@@ -19,10 +21,12 @@ function App() {
     const newTodoItem = {
       id: todos.length + 1,
       title: newTodo,
-      status: "todo"
+      status: "todo",
+      priority: newPriority
     }
     setTodos([...todos, newTodoItem]);
     setNewTodo("");
+    setNewPriority("low");
   };
 
   const startEditing = (todo) => {
@@ -43,6 +47,12 @@ function App() {
       setTodos(todos.filter(todo => todo.id !== id));
     }
   };
+
+  const completeTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, status: "done" } : todo
+    ));
+  }
 
   const cancelEditing = () => {
     if (window.confirm("Are you sure you want to cancel editing? Unsaved changes will be lost.")) {
@@ -66,6 +76,14 @@ function App() {
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new todo"
         />
+        <select
+          value={newPriority}
+          onChange={(e) => setNewPriority(e.target.value)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
         <button onClick={addTodo}>Add</button>
       </div>
 
@@ -80,6 +98,7 @@ function App() {
           <tr>
             <th>title</th>
             <th>status</th>
+            <th>priority</th>
             <th>actions</th>
           </tr>
         </thead>
@@ -110,6 +129,20 @@ function App() {
                   item.status
                 )}
               </td>
+              <td className={`priority-${item.priority}`}>
+                {editingTodo === item.id ? (
+                  <select
+                    value={editingPriority}
+                    onChange={(e) => setEditingPriority(e.target.value)}
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                ) : (
+                  item.priority
+                )}
+              </td>
               <td>
                 {editingTodo === item.id ? (
                   <>
@@ -120,6 +153,8 @@ function App() {
                   <>
                     <button onClick={() => startEditing(item)}>Edit</button>
                     <button onClick={() => deleteTodo(item.id)}>Delete</button>
+                    <button onClick={() => completeTodo(item.id)}>Complete</button>
+
                   </>
                 )}
               </td>
