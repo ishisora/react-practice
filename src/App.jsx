@@ -15,6 +15,7 @@ function App() {
   const [editingStatus, setEditingStatus] = useState("");
   const [editingPriority, setEditingPriority] = useState("");
   const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
 
   const addTodo = () => {
@@ -65,6 +66,8 @@ function App() {
   const filteredTodos = todos.filter(todo => {
     if (filter === "all") return true;
     return todo.status === filter;
+  }).filter(todo => {
+    return todo.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const showDetails = (todo) => {
@@ -73,6 +76,12 @@ function App() {
 
   const closeDetails = () => {
     setSelectedTodo(null);
+  };
+
+  const handleModalClick = (e) => {
+    if (e.target.className === "modal") {
+      closeDetails();
+    }
   };
 
   return (
@@ -101,6 +110,15 @@ function App() {
         <button onClick={() => setFilter("all")}>All</button>
         <button onClick={() => setFilter("todo")}>Todo</button>
         <button onClick={() => setFilter("done")}>Done</button>
+      </div>
+
+      <div className="search">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search todos by title"
+        />
       </div>
 
       <table>
@@ -174,7 +192,7 @@ function App() {
       </table >
 
       {selectedTodo && (
-        <div className="modal">
+        <div className="modal" onClick={handleModalClick}>
           <div className="modal-content">
             <h2>Task Details</h2>
             <ul>
