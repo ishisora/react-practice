@@ -1,6 +1,11 @@
 import { useState } from "react";
 import "./App.css";
-import { FaCheck, FaEdit, FaTrash, FaInfoCircle, FaExclamationTriangle } from 'react-icons/fa';
+import TodoList from './components/TodoList';
+import AddTodoModal from './components/AddTodoModal';
+import EditTodoModal from './components/EditTodoModal';
+import TaskDetailsModal from './components/TaskDetailsModal';
+import TodoFilters from './components/TodoFilters';
+import SearchBar from './components/SearchBar';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -104,149 +109,50 @@ function App() {
 
       <button className="add-task-button" onClick={() => setIsAddModalOpen(true)}>Add New Task</button>
 
-      <div className="filters">
-        <button
-          className={filter === "all" ? "active" : ""}
-          onClick={() => setFilter("all")}
-        >
-          All
-        </button>
-        <button
-          className={filter === "todo" ? "active" : ""}
-          onClick={() => setFilter("todo")}
-        >
-          Todo
-        </button>
-        <button
-          className={filter === "done" ? "active" : ""}
-          onClick={() => setFilter("done")}
-        >
-          Done
-        </button>
-      </div>
+      <TodoFilters filter={filter} setFilter={setFilter} />
 
-      <div className="search">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search todos by title"
-        />
-      </div>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      <table>
-        <thead>
-          <tr>
-            <th>title</th>
-            <th>status</th>
-            <th>priority</th>
-            <th>actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTodos.map((item) => (
-            <tr key={item.id}>
-              <td className={item.status === "done" ? "completed" : ""}>
-                {item.title}
-              </td>
-              <td className={`status-${item.status}`}>
-                {item.status}
-              </td>
-              <td className={`priority-${item.priority}`}>
-                {item.priority}
-              </td>
-              <td>
-                <button onClick={() => startEditing(item)}><FaEdit /></button>
-                <button onClick={() => deleteTodo(item.id)}><FaTrash /></button>
-                <button onClick={() => completeTodo(item.id)}><FaCheck /></button>
-                <button onClick={() => showDetails(item)}><FaInfoCircle /></button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table >
+      <TodoList
+        todos={filteredTodos}
+        startEditing={startEditing}
+        deleteTodo={deleteTodo}
+        completeTodo={completeTodo}
+        showDetails={showDetails}
+      />
 
-      {isAddModalOpen && (
-        <div className="modal" onClick={handleModalClick}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Add New Task</h2>
-            {errorMessage && (
-              <p className="error-message">
-                <FaExclamationTriangle />{errorMessage}
-              </p>
-            )}
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Title"
-            />
-            <select
-              value={newPriority}
-              onChange={(e) => setNewPriority(e.target.value)}
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <textarea
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              placeholder="Description"
-            />
-            <button onClick={addTodo}>Add</button>
-            <button onClick={() => setIsAddModalOpen(false)} aria-label="Close Add New Task">Cancel</button>
-          </div>
-        </div>
-      )}
+      <AddTodoModal
+        isOpen={isAddModalOpen}
+        closeModal={() => setIsAddModalOpen(false)}
+        addTodo={addTodo}
+        newTitle={newTitle}
+        setNewTitle={setNewTitle}
+        newPriority={newPriority}
+        setNewPriority={setNewPriority}
+        newDescription={newDescription}
+        setNewDescription={setNewDescription}
+        errorMessage={errorMessage}
+      />
 
-      {selectedTodo && (
-        <div className="modal" onClick={handleModalClick}>
-          <div className="modal-content">
-            <h2>Task Details</h2>
-            <p><strong>Title:</strong> {selectedTodo.title}</p>
-            <p><strong>Status:</strong> {selectedTodo.status}</p>
-            <p><strong>Priority:</strong> {selectedTodo.priority}</p>
-            <p><strong>Description:</strong> {selectedTodo.description} </p>
-            <button onClick={closeDetails} aria-label="Close Task Details">Close</button>
-          </div>
-        </div>
-      )}
+      <EditTodoModal
+        isOpen={!!editingTodo}
+        closeModal={cancelEditing}
+        saveTodo={() => saveTodo(editingTodo)}
+        editingTitle={editingTitle}
+        setEditingTitle={setEditingTitle}
+        editingStatus={editingStatus}
+        setEditingStatus={setEditingStatus}
+        editingPriority={editingPriority}
+        setEditingPriority={setEditingPriority}
+        editingDescription={editingDescription}
+        setEditingDescription={setEditingDescription}
+      />
 
-      {editingTodo && (
-        <div className="modal" onClick={handleModalClick}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Edit Task</h2>
-            <input
-              type="text"
-              value={editingTitle}
-              onChange={(e) => setEditingTitle(e.target.value)}
-            />
-            <select
-              value={editingStatus}
-              onChange={(e) => setEditingStatus(e.target.value)}
-            >
-              <option value="todo">todo</option>
-              <option value="done">done</option>
-            </select>
-            <select
-              value={editingPriority}
-              onChange={(e) => setEditingPriority(e.target.value)}
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <textarea
-              value={editingDescription}
-              onChange={(e) => setEditingDescription(e.target.value)}
-              placeholder="Description"
-            />
-            <button onClick={() => saveTodo(editingTodo)}>Save</button>
-            <button onClick={cancelEditing} aria-label="Close Task Editing">Cancel</button>
-          </div>
-        </div>
-      )}
+      <TaskDetailsModal
+        isOpen={!!selectedTodo}
+        closeModal={closeDetails}
+        selectedTodo={selectedTodo}
+      />
     </>
   )
 }
