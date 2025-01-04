@@ -96,13 +96,6 @@ function App() {
     setSelectedTodo(null);
   };
 
-  const handleModalClick = (e) => {
-    if (e.target.className === "modal") {
-      setSelectedTodo(null);
-      setIsAddModalOpen(false);
-    }
-  };
-
   return (
     <>
       <h1>todo app</h1>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaEdit, FaTrash, FaCheck, FaInfoCircle } from 'react-icons/fa';
+import './TodoItem.css';
 
 const TodoItem = ({ item, startEditing, deleteTodo, completeTodo, showDetails }) => {
   const { id, title, status, priority } = item;

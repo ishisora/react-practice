@@ -1,4 +1,5 @@
 import React from 'react';
+import './TodoFilters.css';
 
 const TodoFilters = ({ filter, setFilter }) => {
   return (

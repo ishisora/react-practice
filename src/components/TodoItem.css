@@ -1,0 +1,24 @@
+.completed {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.status-todo {
+  color: blue;
+}
+
+.status-done {
+  color: grey;
+}
+
+.priority-Low {
+  color: green;
+}
+
+.priority-Medium {
+  color: orange;
+}
+
+.priority-High {
+  color: red;
+}
