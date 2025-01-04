@@ -247,3 +247,8 @@ td:last-of-type {
     background-color: #004494;
     transform: scale(1);
 }
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}

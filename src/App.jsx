@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { FaCheck, FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
+import { FaCheck, FaEdit, FaTrash, FaInfoCircle, FaExclamationTriangle } from 'react-icons/fa';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -21,9 +21,13 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const addTodo = () => {
-    if (newTitle.trim() === "") return;
+    if (newTitle.trim() === "") {
+      setErrorMessage("Title is required");
+      return;
+    }
     const newTodoItem = {
       id: todos.length + 1,
       title: newTitle,
@@ -36,6 +40,7 @@ function App() {
     setNewPriority("Low");
     setNewDescription("");
     setIsAddModalOpen(false);
+    setErrorMessage("");
   };
 
   const startEditing = (todo) => {
@@ -165,6 +170,11 @@ function App() {
         <div className="modal" onClick={handleModalClick}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Add New Task</h2>
+            {errorMessage && (
+              <p className="error-message">
+                <FaExclamationTriangle />{errorMessage}
+              </p>
+            )}
             <input
               type="text"
               value={newTitle}
