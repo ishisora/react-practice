@@ -3,10 +3,10 @@ import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([
-    { id: 1, title: "test1", status: "todo", priority: "low" },
-    { id: 2, title: "test2", status: "done", priority: "medium" },
-    { id: 3, title: "test3", status: "todo", priority: "high" },
-    { id: 4, title: "test4", status: "done", priority: "low" }
+    { id: 1, title: "test1", status: "todo", priority: "low", description: "This is a test task 1" },
+    { id: 2, title: "test2", status: "done", priority: "medium", description: "This is a test task 2" },
+    { id: 3, title: "test3", status: "todo", priority: "high", description: "This is a test task 3" },
+    { id: 4, title: "test4", status: "done", priority: "low", description: "This is a test task 4" }
   ]);
   const [newTodo, setNewTodo] = useState("");
   const [newPriority, setNewPriority] = useState("low");
@@ -15,6 +15,7 @@ function App() {
   const [editingStatus, setEditingStatus] = useState("");
   const [editingPriority, setEditingPriority] = useState("");
   const [filter, setFilter] = useState("all");
+  const [selectedTodo, setSelectedTodo] = useState(null);
 
   const addTodo = () => {
     if (newTodo.trim() === "") return;
@@ -22,7 +23,8 @@ function App() {
       id: todos.length + 1,
       title: newTodo,
       status: "todo",
-      priority: newPriority
+      priority: newPriority,
+      description: ""
     }
     setTodos([...todos, newTodoItem]);
     setNewTodo("");
@@ -64,6 +66,14 @@ function App() {
     if (filter === "all") return true;
     return todo.status === filter;
   });
+
+  const showDetails = (todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const closeDetails = () => {
+    setSelectedTodo(null);
+  };
 
   return (
     <>
@@ -154,7 +164,7 @@ function App() {
                     <button onClick={() => startEditing(item)}>Edit</button>
                     <button onClick={() => deleteTodo(item.id)}>Delete</button>
                     <button onClick={() => completeTodo(item.id)}>Complete</button>
-
+                    <button onClick={() => showDetails(item)}>Details</button>
                   </>
                 )}
               </td>
@@ -162,6 +172,21 @@ function App() {
           ))}
         </tbody>
       </table >
+
+      {selectedTodo && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Task Details</h2>
+            <ul>
+              <li><strong>Title:</strong> {selectedTodo.title}</li>
+              <li><strong>Status:</strong> {selectedTodo.status}</li>
+              <li><strong>Priority:</strong> {selectedTodo.priority}</li>
+              <li><strong>Description:</strong> {selectedTodo.description} </li>
+            </ul>
+            <button onClick={closeDetails}>Close</button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
