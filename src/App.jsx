@@ -9,8 +9,10 @@ function App() {
     { id: 3, title: "test3", status: "todo", priority: "High", description: "This is a test task 3" },
     { id: 4, title: "test4", status: "done", priority: "Low", description: "This is a test task 4" }
   ]);
-  const [newTodo, setNewTodo] = useState("");
+  const [newTitle, setNewTitle] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newPriority, setNewPriority] = useState("Low");
+  const [newDescription, setNewDescription] = useState("");
   const [editingTodo, setEditingTodo] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [editingStatus, setEditingStatus] = useState("");
@@ -21,17 +23,19 @@ function App() {
   const [selectedTodo, setSelectedTodo] = useState(null);
 
   const addTodo = () => {
-    if (newTodo.trim() === "") return;
+    if (newTitle.trim() === "") return;
     const newTodoItem = {
       id: todos.length + 1,
-      title: newTodo,
+      title: newTitle,
       status: "todo",
       priority: newPriority,
-      description: ""
+      description: newDescription
     }
     setTodos([...todos, newTodoItem]);
-    setNewTodo("");
+    setNewTitle("");
     setNewPriority("Low");
+    setNewDescription("");
+    setIsAddModalOpen(false);
   };
 
   const startEditing = (todo) => {
@@ -84,7 +88,8 @@ function App() {
 
   const handleModalClick = (e) => {
     if (e.target.className === "modal") {
-      closeDetails();
+      setSelectedTodo(null);
+      setIsAddModalOpen(false);
     }
   };
 
@@ -92,28 +97,27 @@ function App() {
     <>
       <h1>todo app</h1>
 
-      <div className="todo-form">
-        <input
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Add a new todo"
-        />
-        <select
-          value={newPriority}
-          onChange={(e) => setNewPriority(e.target.value)}
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-        <button onClick={addTodo}>Add</button>
-      </div>
+      <button className="add-task-button" onClick={() => setIsAddModalOpen(true)}>Add New Task</button>
 
       <div className="filters">
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("todo")}>Todo</button>
-        <button onClick={() => setFilter("done")}>Done</button>
+        <button
+          className={filter === "all" ? "active" : ""}
+          onClick={() => setFilter("all")}
+        >
+          All
+        </button>
+        <button
+          className={filter === "todo" ? "active" : ""}
+          onClick={() => setFilter("todo")}
+        >
+          Todo
+        </button>
+        <button
+          className={filter === "done" ? "active" : ""}
+          onClick={() => setFilter("done")}
+        >
+          Done
+        </button>
       </div>
 
       <div className="search">
@@ -157,17 +161,44 @@ function App() {
         </tbody>
       </table >
 
+      {isAddModalOpen && (
+        <div className="modal" onClick={handleModalClick}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Add New Task</h2>
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="Title"
+            />
+            <select
+              value={newPriority}
+              onChange={(e) => setNewPriority(e.target.value)}
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <textarea
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              placeholder="Description"
+            />
+            <button onClick={addTodo}>Add</button>
+            <button onClick={() => setIsAddModalOpen(false)} aria-label="Close Add New Task">Cancel</button>
+          </div>
+        </div>
+      )}
+
       {selectedTodo && (
         <div className="modal" onClick={handleModalClick}>
           <div className="modal-content">
             <h2>Task Details</h2>
-            <ul>
-              <li><strong>Title:</strong> {selectedTodo.title}</li>
-              <li><strong>Status:</strong> {selectedTodo.status}</li>
-              <li><strong>Priority:</strong> {selectedTodo.priority}</li>
-              <li><strong>Description:</strong> {selectedTodo.description} </li>
-            </ul>
-            <button onClick={closeDetails}>Close</button>
+            <p><strong>Title:</strong> {selectedTodo.title}</p>
+            <p><strong>Status:</strong> {selectedTodo.status}</p>
+            <p><strong>Priority:</strong> {selectedTodo.priority}</p>
+            <p><strong>Description:</strong> {selectedTodo.description} </p>
+            <button onClick={closeDetails} aria-label="Close Task Details">Close</button>
           </div>
         </div>
       )}
@@ -202,7 +233,7 @@ function App() {
               placeholder="Description"
             />
             <button onClick={() => saveTodo(editingTodo)}>Save</button>
-            <button onClick={cancelEditing}>Cancel</button>
+            <button onClick={cancelEditing} aria-label="Close Task Editing">Cancel</button>
           </div>
         </div>
       )}
