@@ -86,15 +86,15 @@ td:last-of-type {
     cursor: pointer;
 }
 
-.priority-low {
+.priority-Low {
     color: green;
 }
 
-.priority-medium {
+.priority-Medium {
     color: orange;
 }
 
-.priority-high {
+.priority-High {
     color: red;
 }
 

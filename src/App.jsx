@@ -4,17 +4,18 @@ import { FaCheck, FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
 
 function App() {
   const [todos, setTodos] = useState([
-    { id: 1, title: "test1", status: "todo", priority: "low", description: "This is a test task 1" },
-    { id: 2, title: "test2", status: "done", priority: "medium", description: "This is a test task 2" },
-    { id: 3, title: "test3", status: "todo", priority: "high", description: "This is a test task 3" },
-    { id: 4, title: "test4", status: "done", priority: "low", description: "This is a test task 4" }
+    { id: 1, title: "test1", status: "todo", priority: "Low", description: "This is a test task 1" },
+    { id: 2, title: "test2", status: "done", priority: "Medium", description: "This is a test task 2" },
+    { id: 3, title: "test3", status: "todo", priority: "High", description: "This is a test task 3" },
+    { id: 4, title: "test4", status: "done", priority: "Low", description: "This is a test task 4" }
   ]);
   const [newTodo, setNewTodo] = useState("");
-  const [newPriority, setNewPriority] = useState("low");
+  const [newPriority, setNewPriority] = useState("Low");
   const [editingTodo, setEditingTodo] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [editingStatus, setEditingStatus] = useState("");
   const [editingPriority, setEditingPriority] = useState("");
+  const [editingDescription, setEditingDescription] = useState("");
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
@@ -30,18 +31,20 @@ function App() {
     }
     setTodos([...todos, newTodoItem]);
     setNewTodo("");
-    setNewPriority("low");
+    setNewPriority("Low");
   };
 
   const startEditing = (todo) => {
     setEditingTodo(todo.id);
     setEditingTitle(todo.title);
     setEditingStatus(todo.status);
+    setEditingPriority(todo.priority);
+    setEditingDescription(todo.description);
   };
 
   const saveTodo = (id) => {
     setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, title: editingTitle, status: editingStatus } : todo
+      todo.id === id ? { ...todo, title: editingTitle, status: editingStatus, priority: editingPriority, description: editingDescription } : todo
     ));
     setEditingTodo(null);
   };
@@ -100,9 +103,9 @@ function App() {
           value={newPriority}
           onChange={(e) => setNewPriority(e.target.value)}
         >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
         </select>
         <button onClick={addTodo}>Add</button>
       </div>
@@ -133,59 +136,21 @@ function App() {
         </thead>
         <tbody>
           {filteredTodos.map((item) => (
-            <tr key={item.id} className={editingTodo === item.id ? "editing" : ""}>
+            <tr key={item.id}>
               <td className={item.status === "done" ? "completed" : ""}>
-                {editingTodo === item.id ? (
-                  <input
-                    type="text"
-                    value={editingTitle}
-                    onChange={(e) => setEditingTitle(e.target.value)}
-                  />
-                ) : (
-                  item.title
-                )}
+                {item.title}
               </td>
               <td className={`status-${item.status}`}>
-                {editingTodo === item.id ? (
-                  <select
-                    value={editingStatus}
-                    onChange={(e) => setEditingStatus(e.target.value)}
-                  >
-                    <option value="todo">todo</option>
-                    <option value="done">done</option>
-                  </select>
-                ) : (
-                  item.status
-                )}
+                {item.status}
               </td>
               <td className={`priority-${item.priority}`}>
-                {editingTodo === item.id ? (
-                  <select
-                    value={editingPriority}
-                    onChange={(e) => setEditingPriority(e.target.value)}
-                  >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                ) : (
-                  item.priority
-                )}
+                {item.priority}
               </td>
               <td>
-                {editingTodo === item.id ? (
-                  <>
-                    <button onClick={() => saveTodo(item.id)}>Save</button>
-                    <button onClick={cancelEditing}>Cancel</button>
-                  </>
-                ) : (
-                  <>
-                    <button onClick={() => startEditing(item)}><FaEdit /></button>
-                    <button onClick={() => deleteTodo(item.id)}><FaTrash /></button>
-                    <button onClick={() => completeTodo(item.id)}><FaCheck /></button>
-                    <button onClick={() => showDetails(item)}><FaInfoCircle /></button>
-                  </>
-                )}
+                <button onClick={() => startEditing(item)}><FaEdit /></button>
+                <button onClick={() => deleteTodo(item.id)}><FaTrash /></button>
+                <button onClick={() => completeTodo(item.id)}><FaCheck /></button>
+                <button onClick={() => showDetails(item)}><FaInfoCircle /></button>
               </td>
             </tr>
           ))}
@@ -203,6 +168,41 @@ function App() {
               <li><strong>Description:</strong> {selectedTodo.description} </li>
             </ul>
             <button onClick={closeDetails}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {editingTodo && (
+        <div className="modal" onClick={handleModalClick}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Task</h2>
+            <input
+              type="text"
+              value={editingTitle}
+              onChange={(e) => setEditingTitle(e.target.value)}
+            />
+            <select
+              value={editingStatus}
+              onChange={(e) => setEditingStatus(e.target.value)}
+            >
+              <option value="todo">todo</option>
+              <option value="done">done</option>
+            </select>
+            <select
+              value={editingPriority}
+              onChange={(e) => setEditingPriority(e.target.value)}
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <textarea
+              value={editingDescription}
+              onChange={(e) => setEditingDescription(e.target.value)}
+              placeholder="Description"
+            />
+            <button onClick={() => saveTodo(editingTodo)}>Save</button>
+            <button onClick={cancelEditing}>Cancel</button>
           </div>
         </div>
       )}
