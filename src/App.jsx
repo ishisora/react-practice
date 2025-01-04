@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaPlus } from 'react-icons/fa';
 import "./App.css";
 import TodoList from './components/TodoList';
 import AddTodoModal from './components/AddTodoModal';
@@ -98,13 +99,13 @@ function App() {
 
   return (
     <>
-      <h1>todo app</h1>
-
-      <button className="add-task-button" onClick={() => setIsAddModalOpen(true)}>Add New Task</button>
-
       <TodoFilters filter={filter} setFilter={setFilter} />
 
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+      <button className="add-task-button" onClick={() => setIsAddModalOpen(true)}>
+        <FaPlus />
+      </button>
 
       <TodoList
         todos={filteredTodos}
