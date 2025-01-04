@@ -4,24 +4,15 @@ import './TodoFilters.css';
 const TodoFilters = ({ filter, setFilter }) => {
   return (
     <div className="filters">
-      <button
-        className={filter === "all" ? "active" : ""}
-        onClick={() => setFilter("all")}
-      >
+      <div className={`tab ${filter === "all" ? "active" : ""}`} onClick={() => setFilter("all")}>
         All
-      </button>
-      <button
-        className={filter === "todo" ? "active" : ""}
-        onClick={() => setFilter("todo")}
-      >
+      </div>
+      <div className={`tab ${filter === "todo" ? "active" : ""}`} onClick={() => setFilter("todo")}>
         Todo
-      </button>
-      <button
-        className={filter === "done" ? "active" : ""}
-        onClick={() => setFilter("done")}
-      >
+      </div>
+      <div className={`tab ${filter === "done" ? "active" : ""}`} onClick={() => setFilter("done")}>
         Done
-      </button>
+      </div>
     </div>
   );
 };
