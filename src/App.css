@@ -195,3 +195,9 @@ td:last-of-type {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.editing {
+    background-color: #f0f8ff;
+    border: 2px dashed #007bff;
+    font-style: italic;
+}

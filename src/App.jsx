@@ -133,7 +133,7 @@ function App() {
         </thead>
         <tbody>
           {filteredTodos.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.id} className={editingTodo === item.id ? "editing" : ""}>
               <td className={item.status === "done" ? "completed" : ""}>
                 {editingTodo === item.id ? (
                   <input
