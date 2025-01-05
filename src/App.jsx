@@ -11,7 +11,7 @@ import SearchBar from './components/SearchBar';
 import Breadcrumbs from './components/Breadcrumbs';
 import Home from './components/Home';
 import Sidebar from './components/Sidebar';
-import Tasks from './components/Lists';
+import TodoLists from './components/TodoLists';
 import Calendar from './components/Calendar';
 import Timer from './components/Timer';
 import Settings from './components/Settings';
@@ -40,7 +40,7 @@ const App = () => {
   const [editingStatus, setEditingStatus] = useState("");
   const [editingPriority, setEditingPriority] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("todo");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -184,7 +184,7 @@ const App = () => {
         <Breadcrumbs />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/lists/" element={<Tasks todos={todos} />} />
+          <Route path="/lists/" element={<TodoLists todos={todos} />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/timer" element={<Timer />} />
           <Route path="/settings" element={<Settings />} />
