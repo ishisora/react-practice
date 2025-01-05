@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaPlus } from 'react-icons/fa';
-import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import "./App.css";
 import TodoList from './components/TodoList';
 import AddTodoModal from './components/AddTodoModal';
@@ -10,6 +10,11 @@ import TodoFilters from './components/TodoFilters';
 import SearchBar from './components/SearchBar';
 import Breadcrumbs from './components/Breadcrumbs';
 import Home from './components/Home';
+import Sidebar from './components/Sidebar';
+import Tasks from './components/Lists';
+import Calendar from './components/Calendar';
+import Timer from './components/Timer';
+import Settings from './components/Settings';
 
 const App = () => {
   const [todos, setTodos] = useState({
@@ -39,7 +44,6 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
   const addTodo = (listId) => {
     if (newTitle.trim() === "") {
@@ -174,14 +178,21 @@ const App = () => {
   };
 
   return (
-    <>
-      <Breadcrumbs />
-      <Routes>
-        <Route path="/" element={<Home todos={todos} />} />
-        <Route path="/:listId" element={<TodoListPage />} />
-        <Route path="*" element={<div>Select a Todo List</div>} />
-      </Routes>
-    </>
+    <div className="app">
+      <Sidebar />
+      <div className="content">
+        <Breadcrumbs />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/lists/" element={<Tasks todos={todos} />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/timer" element={<Timer />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/lists/:listId" element={<TodoListPage />} />
+          <Route path="*" element={<div>Select a Todo List</div>} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 
