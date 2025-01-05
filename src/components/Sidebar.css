@@ -8,14 +8,17 @@
 }
 
 .sidebar h2 {
-  margin-top: 0;
   font-size: 1.2rem;
   color: #007bff;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .sidebar li {
@@ -30,9 +33,4 @@
 
 .sidebar li a:hover {
   color: #007bff;
-}
-
-.content {
-  margin-left: 220px;
-  padding: 20px;
 }

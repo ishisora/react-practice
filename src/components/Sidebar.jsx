@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <h2><FaBars />Menu</h2>
+      <h2>Menu</h2>
       <ul>
         <li><Link to="/lists">Todoリスト</Link></li>
         <li><Link to="/calendar">カレンダー</Link></li>
